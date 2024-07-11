@@ -2,7 +2,7 @@
 client & server run with npm start (Do npm i before running the npm start) Data base created with MongoDB Compass
 
 ## Technologies
-1. React.js (useRef, usestate, useEffect)
+1. React.js (usestate, useEffect, axois)
 2. Node.js (Express.js)
 3. MongoDB
 4. React Boostrap

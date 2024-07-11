@@ -7,36 +7,52 @@ import Select from "../../components/Select";
 import TodoTable from "../../components/Table";
 
 const Home = () => {
-  const [tasks, setTasks] = useState([]);
+  const [todos, setTodos] = useState([]);
   const [filterStatus, setFilterStatus] = useState("");
 
   useEffect(() => {
-    getAllTasks();
+    getAllTodos();
   }, []);
 
-  const getAllTasks = async () => {
+  const getAllTodos = async () => {
     try {
       const data = await axios.get("http://localhost:5000/api/todo");
       if (data) {
         console.log(data);
-        setTasks(data.data);
+        setTodos(data.data);
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleDeleteTask = async (id) => {
+  const handleDeleteTodo = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/todo/${id}`);
       toast.success("Successfully Deleted!");
-      getAllTasks();
+      getAllTodos();
     } catch (err) {
       console.log(err);
     }
   };
 
-  const filteredTasks = tasks.filter((track) => {
+  const handleComplete = async (id, currentStatus) => {
+    const newStatus = currentStatus === "Complete" ? "Active" : "Complete";
+
+    try {
+      await axios.put(`http://localhost:5000/api/todo/${id}`, {
+        status: newStatus,
+      });
+      const updatedTodos = todos.map((todo) =>
+        todo._id === id ? { ...todo, status: newStatus } : todo
+      );
+      setTodos(updatedTodos);
+    } catch (error) {
+      console.error("Error updating todo status:", error);
+    }
+  };
+
+  const filteredTodos = todos.filter((track) => {
     return track.status.toLowerCase().includes(filterStatus.toLowerCase());
   });
 
@@ -71,14 +87,15 @@ const Home = () => {
           <br />
           <Row>
             <Col>
-              <h3>Task Management System</h3>
+              <h3>TODO Management System</h3>
             </Col>
           </Row>
           <br />
           <Row>
             <TodoTable
-              filteredTasks={filteredTasks}
-              handleDeleteTask={handleDeleteTask}
+              handleComplete={handleComplete}
+              filteredTodos={filteredTodos}
+              handleDeleteTodo={handleDeleteTodo}
             />
           </Row>
         </Container>

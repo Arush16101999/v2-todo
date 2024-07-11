@@ -5,39 +5,63 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
 const TodoTable = (props) => {
-  const { handleDeleteTask, filteredTasks } = props;
+  const { handleDeleteTodo, filteredTodos, handleComplete } = props;
   return (
     <div className="table-responsive">
       <Table responsive bordered hover variant="dark">
         <thead>
           <tr>
-            <th>Task Title</th>
-            {/* <th>Description</th> */}
+            <th></th>
+            <th>Todo Title</th>
+            <th>Due Date</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {filteredTasks.map((task, index) => (
+          {filteredTodos.map((todo, index) => (
             <tr key={index}>
-              <td>{task.title}</td>
-              {/* <td>{task.description}</td> */}
+              <td>
+                <input
+                  type="checkbox"
+                  checked={todo.status === "Complete"}
+                  onChange={() => handleComplete(todo._id, todo.status)}
+                />
+              </td>
+              <td
+                style={{
+                  textDecoration:
+                    todo.status === "Complete" ? "line-through" : "",
+                }}
+              >
+                {todo.title}
+              </td>
+              <td
+                style={{
+                  textDecoration:
+                    todo.status === "Complete" ? "line-through" : "",
+                }}
+              >
+                {todo.dueDate
+                  ? new Date(todo.dueDate).toISOString().split("T")[0]
+                  : ""}
+              </td>
               <td>
                 <Badge
                   bg={
-                    task.status === "Complete"
+                    todo.status === "Complete"
                       ? "info"
-                      : task.status === "Active"
+                      : todo.status === "Active"
                       ? "success"
                       : "warning"
                   }
                 >
-                  {task.status}
+                  {todo.status}
                 </Badge>
               </td>
 
               <td>
-                <Link to={`/updateTodo/${task._id}`}>
+                <Link to={`/updateTodo/${todo._id}`}>
                   <Button variant="primary" size="sm">
                     Edit
                   </Button>
@@ -46,7 +70,7 @@ const TodoTable = (props) => {
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={() => handleDeleteTask(task._id)}
+                  onClick={() => handleDeleteTodo(todo._id)}
                 >
                   Delete
                 </Button>

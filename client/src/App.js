@@ -6,8 +6,8 @@ import AddTodo from "./containers/AddTodo";
 
 function App() {
   return (
-    <div>
-      <div className="App">
+    <div className="App">
+      <div className="App-header">
         <Toaster position="bottom-right" reverseOrder={false} />
         <BrowserRouter>
           <Routes>

@@ -18,7 +18,7 @@ const AddTodo = () => {
 
   useEffect(() => {
     if (id) {
-      debugger;
+      // debugger;
       getTodoById(id);
     }
   }, [id]);
